@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('lote', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('cantidad');
-            $table->foreignId('producto_id')->primary()
+            $table->foreignId('producto_id')
                 ->constrained('producto')
                 ->onUpdate('cascade');
             $table->timestamps();
