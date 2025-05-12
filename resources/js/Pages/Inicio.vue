@@ -1,6 +1,7 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3'
 import Layout from '@/Layouts/Layout.vue'
+import Navigation from '@/Components/Navigation.vue'
 
 defineOptions({
     layout: Layout
@@ -11,24 +12,26 @@ const isAuthenticated = page.props.auth.user !== null
 </script>
 
 <template>
-    <div>
-        <!-- Usuario NO autenticado -->
-        <div v-if="!isAuthenticated" class="hero min-h-screen"
-             style="background-image: url('https://png.pngtree.com/background/20230519/original/pngtree-an-asian-shop-in-a-city-at-night-picture-image_2663090.jpg');">
-            <div class="hero-overlay bg-opacity-60"></div>
-            <div class="hero-content text-center text-neutral-content">
-                <div class="max-w-md">
-                    <h1 class="mb-5 text-5xl font-bold">Tienda</h1>
-                    <p class="mb-5">Aquí podrás encontrar productos</p>
-                    <hr />
-                    <br />
-                    <p class="mb-5">Regístrate para acceder a las opciones de gestión</p>
-                    <a href="/login">
-                        <button class="btn btn-primary">Login</button>
+    <!-- Usuario NO autenticado -->
+    <div v-if="!isAuthenticated" class="bg-sky-200 min-h-screen">
+        <div class="flex items-center justify-center justify-self-center min-h-64 min-w-full">
+            <img src="/images/imagenInicio.jpg" class="h-96 w-2/3 mt-7 mb-5 rounded-2xl" alt="Logo">
+        </div>
+        <div class="flex justify-self-center w-2/3">
+            <div class="text-black">
+                <h1 class="mb-5 text-5xl font-bold text-blue-700">Compra+</h1>
+                <div class="w-1/2">
+                    <hr class="border-t-2 border-gray-800 "/><br />
+                    <p class="mb-5">Compra+ es tu tienda de alimentación online donde encontrarás
+                        tus productos favoritos: desde esa bebida que tanto te gusta hasta
+                        los ingredientes perfectos para tu próxima receta.</p>
+                    <a href="/productos">
+                        <button class="btn btn-primary">Ver Productos</button>
                     </a>
                 </div>
             </div>
         </div>
+    </div>
 
         <!-- Usuario autenticado -->
         <div v-else class="hero min-h-screen bg-sky-500">
@@ -45,5 +48,4 @@ const isAuthenticated = page.props.auth.user !== null
                 </div>
             </div>
         </div>
-    </div>
 </template>

@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -11,8 +11,11 @@ Route::get('/productos', [ProductoController::class, 'index']);
 
 Route::get('/', function () {
     return Inertia::render('Inicio');
-});
+})->name('home');
 
+Route::get('/loginAdmin', function () {
+    return Inertia::render('Inicio');
+})->name('home');
 
 Route::get('/productos', function () {
     return view('productos');
@@ -37,4 +40,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::middleware('guest:admins')->group(function () {
+            Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+            Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+        });
+
+        Route::middleware('auth:admins')->group(function () {
+            Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+            Route::get('/dashboard', function () {
+                return inertia('Admin/Dashboard');
+            })->name('dashboard');
+        });
+    });
 require __DIR__.'/auth.php';

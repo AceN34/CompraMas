@@ -2,8 +2,8 @@
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import Footer from "@/Components/Footer.vue";
-import {route} from "ziggy-js";
+import Footer from '@/Components/Footer.vue';
+import { route } from 'ziggy-js';
 
 defineProps({
     canResetPassword: {
@@ -21,15 +21,15 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('login'), {
+    form.post(route('admin.login'), {
         onFinish: () => form.reset('password'),
     });
 };
 </script>
 
 <template>
-    <Head title="Iniciar Sesión - Cliente" />
-    <div class="bg-sky-200 flex flex-col text-black">
+    <Head title="Iniciar Sesión - Admin" />
+    <div class="bg-sky-200 flex flex-col text-black min-h-screen justify-between">
         <!-- Header con logo -->
         <div class="bg-sky-400 py-4 flex justify-center border-b border-blue-800">
             <Link href="/">
@@ -39,9 +39,7 @@ const submit = () => {
 
         <!-- Formulario -->
         <div class="flex flex-col items-center justify-center mt-8">
-            <Head title="Iniciar Sesión" />
-
-            <h1 class="text-4xl font-black mb-6">Iniciar Sesión</h1>
+            <h1 class="text-4xl font-black mb-6">Iniciar Sesión Empleado</h1>
 
             <form @submit.prevent="submit" class="w-full max-w-md px-4">
                 <div class="mb-4">
@@ -91,22 +89,16 @@ const submit = () => {
                 </div>
 
                 <!-- Acciones adicionales -->
-                <div class="flex justify-around mb-7">
-                    <div class="text-center">
-                        <p class="text-lg font-medium">¿No tienes cuenta?</p>
-                        <Link href="/register" class="mt-2 inline-block bg-blue-700 hover:bg-blue-800 text-white py-2 px-6 rounded-lg font-semibold">
-                            Crear Cuenta
-                        </Link>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-lg font-medium">¿Eres empleado?</p>
-                        <Link :href="route('admin.login')" class="mt-2 inline-block bg-blue-700 hover:bg-blue-800 text-white py-2 px-6 rounded-lg font-semibold">
-                            Login Alternativo
-                        </Link>
-                    </div>
+                <div class="text-center mb-6">
+                    <p class="text-lg font-medium">¿Eres cliente?</p>
+                    <Link :href="route('login')" class="mt-2 inline-block bg-blue-700 hover:bg-blue-800 text-white py-2 px-6 rounded-lg font-semibold">
+                        Login Cliente
+                    </Link>
                 </div>
             </form>
         </div>
+
+        <Footer />
     </div>
-    <Footer />
 </template>
+
