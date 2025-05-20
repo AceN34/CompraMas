@@ -7,16 +7,13 @@ use Inertia\Inertia;
 
 class Producto extends Model
 {
-    public function index()
-    {
-        $productos = Producto::all();
-        return Inertia::render('Productos', [
-            'productos' => $productos
-        ]);
-    }
+    protected $fillable = ['nombre', 'precio', 'categoria', 'cantidad', 'imagen'];
     public function ventas() {
         return $this->belongsToMany(Venta::class)
             ->withPivot('cantidad')
             ->withTimestamps();
+    }
+    public function lotes() {
+        return $this->hasMany(Lote::class);
     }
 }

@@ -28,7 +28,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Iniciar Sesión - Cliente" />
+    <Head title="Login" />
     <div class="bg-sky-200 flex flex-col text-black">
         <!-- Header con logo -->
         <div class="bg-sky-400 py-4 flex justify-center border-b border-blue-800">
@@ -83,14 +83,13 @@ const submit = () => {
                     </PrimaryButton>
                 </div>
 
-                <!-- Separador -->
                 <div class="flex items-center my-6">
                     <hr class="flex-grow border-blue-600" />
                     <span class="px-4 text-xl font-bold text-gray-700">O</span>
                     <hr class="flex-grow border-blue-600" />
                 </div>
 
-                <!-- Acciones adicionales -->
+                <!-- Opciones alternativas -->
                 <div class="flex justify-around mb-7">
                     <div class="text-center">
                         <p class="text-lg font-medium">¿No tienes cuenta?</p>

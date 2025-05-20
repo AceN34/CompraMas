@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AuthenticatedSessionController extends Controller
 {
-    public function create()
+    public function login()
     {
         return inertia('Admin/Login');
     }
 
-    public function store(Request $request)
+    public function storeLogin(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -23,8 +24,7 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::guard('admins')->attempt($credentials)) {
             $request->session()->regenerate();
-
-            return redirect()->intended('/admin/dashboard');
+            return redirect()->route('admin.inicio');
         }
 
         return back()->withErrors([
@@ -32,14 +32,14 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    public function destroy(Request $request)
+    public function logout(Request $request)
     {
         Auth::guard('admins')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/admin/login');
+        return redirect()->route('admin.login');
     }
 }
 

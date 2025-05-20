@@ -7,7 +7,7 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js'
 import { Ziggy } from './ziggy.js'
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Compra+';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

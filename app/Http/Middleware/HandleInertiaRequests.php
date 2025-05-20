@@ -32,9 +32,9 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => Auth::user(),
+                'cliente' => fn () => Auth::guard('cliente')->user(),
+                'admin' => fn () => Auth::guard('admins')->user(),
             ],
-            'appName' => config('app.name'),
         ]);
     }
 }

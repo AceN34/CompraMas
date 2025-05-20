@@ -1,26 +1,56 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\ProductoController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\LoteController;
+use App\Http\Controllers\Admin\ProductoController;
+use App\Http\Controllers\ClienteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-Route::get('/productos', [ProductoController::class, 'index']);
-
 
 Route::get('/', function () {
     return Inertia::render('Inicio');
 })->name('home');
 
-Route::get('/loginAdmin', function () {
-    return Inertia::render('Inicio');
-})->name('home');
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
 
-Route::get('/productos', function () {
-    return view('productos');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('web')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'login'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'storeLogin']);
 });
 
+Route::middleware('auth:admins')->prefix('admin')->name('admin.')->group(function () {
+    Route::post('/logout', [AuthenticatedSessionController::class, 'logout'])->name('logout');
+    Route::get('/inicio', [ProductoController::class, 'indexAdmin'])->name('inicio');
+    Route::prefix('gestionProducto')->group(function () {
+        Route::post('/', [ProductoController::class, 'store'])->name('productos.store');
+        Route::get('/nuevo', [ProductoController::class, 'create'])->name('productos.nuevo');
+        Route::get('/{id}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
+        Route::put('/{id}', [ProductoController::class, 'update'])->name('productos.update');
+        Route::delete('/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+    });
+    Route::prefix('gestionLotes')->group(function () {
+        Route::get('/', [LoteController::class, 'index'])->name('lotes.index');
+        Route::get('/nuevo', [LoteController::class, 'create'])->name('lotes.create');
+        Route::post('/', [LoteController::class, 'store'])->name('lotes.store');
+        Route::get('/{id}/edit', [LoteController::class, 'edit'])->name('lotes.edit');
+        Route::put('/{id}', [LoteController::class, 'update'])->name('lotes.update');
+        Route::delete('/{id}', [LoteController::class, 'destroy'])->name('lotes.destroy');
+    });
+    Route::get('ventas/', [LoteController::class, 'index'])->name('ventas.index');
+});
+
+
+
+Route::post('/register', [ClienteController::class, 'register'])->name('register');
+Route::post('/login', [ClienteController::class, 'login'])->name('login');
+Route::get('/login', [ClienteController::class, 'verLogin'])->name('login.form');
+Route::post('/logout', [ClienteController::class, 'logout'])->name('logout');
+Route::get('/register', [ClienteController::class, 'verRegistro'])->name('register.form');
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -29,28 +59,3 @@ Route::get('/productos', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });*/
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-    Route::prefix('admin')->name('admin.')->group(function () {
-        Route::middleware('guest:admins')->group(function () {
-            Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-            Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-        });
-
-        Route::middleware('auth:admins')->group(function () {
-            Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-            Route::get('/dashboard', function () {
-                return inertia('Admin/Dashboard');
-            })->name('dashboard');
-        });
-    });
-require __DIR__.'/auth.php';

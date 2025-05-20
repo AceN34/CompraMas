@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('lote', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('cantidad');
-            $table->foreignId('producto_id')
-                ->constrained('producto')
+            $table->foreignId('productos_id')
+                ->constrained('productos')
                 ->onUpdate('cascade');
+            $table->string('cantidad');
+            $table->date('fecha_caducidad')->nullable();
+            $table->string('estado');
             $table->timestamps();
         });
     }

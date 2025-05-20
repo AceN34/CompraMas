@@ -15,13 +15,13 @@ return new class extends Migration
             $table->foreignId('venta_id')
                 ->constrained('venta')
                 ->onUpdate('cascade');
-            $table->foreignId('producto_id')
-                ->constrained('producto')
+            $table->foreignId('productos_id')
+                ->constrained('productos')
                 ->onUpdate('cascade');
             $table->integer('cantidad');
             $table->timestamps();
 
-            $table->primary(['venta_id', 'producto_id']);
+            $table->primary(['venta_id', 'productos_id']);
         });
     }
 

@@ -28,8 +28,8 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Iniciar Sesión - Admin" />
-    <div class="bg-sky-200 flex flex-col text-black min-h-screen justify-between">
+    <Head title="Login Admin" />
+    <div class="bg-sky-300 flex flex-col text-black min-h-screen justify-between">
         <!-- Header con logo -->
         <div class="bg-sky-400 py-4 flex justify-center border-b border-blue-800">
             <Link href="/">

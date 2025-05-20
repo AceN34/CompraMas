@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id()->primary();
             $table->decimal('total', 10);
             $table->string('direccion', 255);
-            $table->foreignId('producto_id')
-                ->constrained('producto')
+            $table->foreignId('productos_id')
+                ->constrained('productos')
                 ->onUpdate('cascade');
             $table->timestamps();
         });
