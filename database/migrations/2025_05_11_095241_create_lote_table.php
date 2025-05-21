@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lote', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('productos_id')
+            $table->string('codigo')->primary();
+            $table->foreignId('producto_id')
                 ->constrained('productos')
                 ->onUpdate('cascade');
             $table->string('cantidad');

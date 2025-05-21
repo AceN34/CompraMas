@@ -9,6 +9,7 @@ const productos = usePage().props.productos
 const productoSeleccionado = ref(null)
 
 const form = useForm({
+    codigo: '',
     producto_id: '',
     cantidad: '',
     fecha_caducidad: '',
@@ -30,6 +31,7 @@ const submit = () => {
 }
 </script>
 
+
 <template>
     <div class="min-h-screen bg-sky-300 flex flex-col items-center py-10 px-4 animate-fade-in">
         <h1 class="text-5xl font-extrabold mb-10 text-blue-900 drop-shadow">Añadir Lote</h1>
@@ -38,6 +40,19 @@ const submit = () => {
             @submit.prevent="submit"
             class="w-full max-w-2xl bg-white/80 backdrop-blur-md p-10 rounded-2xl shadow-xl space-y-8 text-black"
         >
+            <!-- Código -->
+            <div>
+                <label for="codigo" class="block text-lg font-semibold text-blue-900 mb-1">Código del Lote</label>
+                <input
+                    id="codigo"
+                    v-model="form.codigo"
+                    type="text"
+                    class="w-full px-5 py-3 rounded-full bg-blue-50 focus:ring-2 focus:ring-blue-400 text-blue-900"
+                    placeholder="Ej: 010425"
+                />
+                <InputError class="mt-1" :message="form.errors.codigo" />
+            </div>
+
             <!-- Producto -->
             <div>
                 <label for="producto_id" class="block text-lg font-semibold text-blue-900 mb-1">Producto</label>
@@ -45,7 +60,6 @@ const submit = () => {
                     id="producto_id"
                     v-model="form.producto_id"
                     class="w-full px-5 py-3 rounded-full bg-blue-50 focus:ring-2 focus:ring-blue-400 text-blue-900"
-                    required
                 >
                     <option disabled value="">Selecciona un producto</option>
                     <option
@@ -54,7 +68,7 @@ const submit = () => {
                         :value="p.id"
                         :disabled="p.disponible <= 0"
                     >
-                        {{ p.nombre }} (Disponible: {{ p.disponible }})
+                        {{ p.nombre }} (Sin Lote: {{ p.disponible }})
                     </option>
                 </select>
                 <InputError class="mt-1" :message="form.errors.producto_id" />
@@ -67,11 +81,8 @@ const submit = () => {
                     id="cantidad"
                     v-model="form.cantidad"
                     type="number"
-                    min="1"
-                    :max="maxCantidad"
                     class="w-full px-5 py-3 rounded-full bg-blue-50 focus:ring-2 focus:ring-blue-400 text-blue-900"
                     :disabled="!productoSeleccionado"
-                    required
                 />
                 <small v-if="productoSeleccionado" class="text-sm text-gray-600">
                     Máx: {{ maxCantidad }} unidades
@@ -87,7 +98,6 @@ const submit = () => {
                     v-model="form.fecha_caducidad"
                     type="date"
                     class="w-full px-5 py-3 rounded-full bg-blue-50 focus:ring-2 focus:ring-blue-400 text-blue-900"
-                    required
                 />
                 <InputError class="mt-1" :message="form.errors.fecha_caducidad" />
             </div>

@@ -35,7 +35,8 @@ class ClienteController extends Controller
 
         if (Auth::guard('cliente')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('productos.index'));
+            $redirectUrl = $request->session()->get('url.intended', route('productos.index'));
+            return redirect()->intended($redirectUrl);
         }
 
         return back()->withErrors([
@@ -44,29 +45,23 @@ class ClienteController extends Controller
     }
 
     public function logout(Request $request) {
-
         Auth::guard('cliente')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        $previousUrl = url()->previous();
-
-        // Evita redirect a /logout o /login
-        if (str_contains($previousUrl, '/logout') || str_contains($previousUrl, '/login')) {
-            $previousUrl = route('productos.index'); //ruta por defecto
-        }
+        $previousUrl = $request->session()->get('url.intended', route('home'));
 
         return redirect()->to($previousUrl)->with('success', 'Has cerrado sesión correctamente.');
     }
 
     public function verLogin(Request $request)
     {
-        $prev = url()->previous();
+        $previousUrl = url()->previous();
 
-        // Evita guardar la URL si es la misma página de login o register
-        if (!$request->session()->has('url.intended') && !str_contains($prev, '/login') && !str_contains($prev, '/register')) {
-            $request->session()->put('url.intended', $prev);
+        // Evita redirect a /logout o /login
+        if (!$request->session()->has('url.intended') && !str_contains($previousUrl, '/login') && !str_contains($previousUrl, '/register')) {
+            $request->session()->put('url.intended', $previousUrl);
         }
 
         return Inertia::render('Auth/Login');

@@ -70,11 +70,9 @@ defineOptions({ layout: Layout })
 
                 <!-- Botón -->
                 <button
-                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2"
+                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg transition-transform transform hover:scale-105 flex items-center gap-3"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7h13l-1.5-7M7 13H5.4M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
-                    </svg>
+                    <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6">
                     Añadir al carrito
                 </button>
 

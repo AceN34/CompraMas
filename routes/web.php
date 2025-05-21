@@ -37,14 +37,12 @@ Route::middleware('auth:admins')->prefix('admin')->name('admin.')->group(functio
         Route::get('/', [LoteController::class, 'index'])->name('lotes.index');
         Route::get('/nuevo', [LoteController::class, 'create'])->name('lotes.create');
         Route::post('/', [LoteController::class, 'store'])->name('lotes.store');
-        Route::get('/{id}/edit', [LoteController::class, 'edit'])->name('lotes.edit');
-        Route::put('/{id}', [LoteController::class, 'update'])->name('lotes.update');
-        Route::delete('/{id}', [LoteController::class, 'destroy'])->name('lotes.destroy');
+        Route::get('/{codigo}/edit', [LoteController::class, 'edit'])->name('lotes.edit');
+        Route::put('/{codigo}', [LoteController::class, 'update'])->name('lotes.update');
+        Route::delete('/{codigo}', [LoteController::class, 'destroy'])->name('lotes.destroy');
     });
     Route::get('ventas/', [LoteController::class, 'index'])->name('ventas.index');
 });
-
-
 
 Route::post('/register', [ClienteController::class, 'register'])->name('register');
 Route::post('/login', [ClienteController::class, 'login'])->name('login');

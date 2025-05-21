@@ -63,20 +63,7 @@ const buscar = () => {
                     Cerrar Sesión
                 </button>
                 <div class="flex items-center gap-1 text-black">
-                    <svg
-                        class="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M2.25 3h1.386a.75.75 0 01.736.59l1.595 7.978a.75.75 0 00.736.59h10.679a.75.75 0 00.736-.59l1.595-7.978a.75.75 0 01.736-.59h1.386M10.5 20.25a.75.75 0 100-1.5.75.75 0 000 1.5zm6.75 0a.75.75 0 100-1.5.75.75 0 000 1.5z"
-                        />
-                    </svg>
+                    <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6">
                     <span>15,00€</span>
                 </div>
             </div>
