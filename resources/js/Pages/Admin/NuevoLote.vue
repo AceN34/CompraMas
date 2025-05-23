@@ -38,7 +38,7 @@ const submit = () => {
 
         <form
             @submit.prevent="submit"
-            class="w-full max-w-2xl bg-white/80 backdrop-blur-md p-10 rounded-2xl shadow-xl space-y-8 text-black"
+            class="w-full max-w-xl bg-white/80 backdrop-blur-md p-10 rounded-2xl shadow-xl space-y-8 text-black"
         >
             <!-- Código -->
             <div>
@@ -106,7 +106,7 @@ const submit = () => {
             <div class="flex justify-between items-center pt-6">
                 <a
                     href="/admin/gestionLotes"
-                    class="text-gray-600 hover:text-black transition underline underline-offset-2"
+                    class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-6 py-2 rounded-full transition"
                 >
                     ← Volver
                 </a>

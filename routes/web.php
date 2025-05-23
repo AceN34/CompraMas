@@ -49,11 +49,11 @@ Route::post('/login', [ClienteController::class, 'login'])->name('login');
 Route::get('/login', [ClienteController::class, 'verLogin'])->name('login.form');
 Route::post('/logout', [ClienteController::class, 'logout'])->name('logout');
 Route::get('/register', [ClienteController::class, 'verRegistro'])->name('register.form');
-/*Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});*/
+
+Route::middleware(['auth:cliente'])->group(function () {
+    Route::get('/perfil', [ClienteController::class, 'perfil'])->name('cliente.perfil');
+    Route::get('/perfil/editar', [ClienteController::class, 'editarPerfil'])->name('cliente.editar');
+    Route::post('/perfil/actualizar', [ClienteController::class, 'actualizarPerfil'])->name('cliente.actualizar');
+    Route::get('/perfil/cambiar-contrasena', [ClienteController::class, 'cambiarContrasenaForm'])->name('cliente.cambiar_contrasena');
+    Route::post('/perfil/cambiar-contrasena', [ClienteController::class, 'actualizarContrasena'])->name('cliente.actualizar_contrasena');
+});

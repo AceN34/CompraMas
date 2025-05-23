@@ -123,7 +123,7 @@ const submit = () => {
             <div class="flex justify-between items-center pt-6">
                 <a
                     href="/admin/inicio"
-                    class="text-gray-600 hover:text-black transition underline underline-offset-2"
+                    class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-6 py-2 rounded-full transition"
                 >
                     ← Volver
                 </a>

@@ -13,9 +13,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => router.visit('login'),
-    });
+    form.post(route('register'));
 };
 </script>
 
@@ -40,7 +38,6 @@ const submit = () => {
                         v-model="form.nombre"
                         class="w-full px-4 py-2 rounded-full bg-blue-600 text-white placeholder-white text-lg focus:outline-none"
                         placeholder="Introduce tu nombre"
-                        required
                     />
                     <InputError class="mt-1 text-sm text-red-600" :message="form.errors.nombre" />
                 </div>
@@ -53,20 +50,26 @@ const submit = () => {
                         v-model="form.email"
                         class="w-full px-4 py-2 rounded-full bg-blue-600 text-white placeholder-white text-lg focus:outline-none"
                         placeholder="Introduce tu correo"
-                        required
                     />
                     <InputError class="mt-1 text-sm text-red-600" :message="form.errors.email" />
                 </div>
 
                 <div class="mb-4">
-                    <label for="password" class="block text-xl font-medium mb-1">Contraseña</label>
+                    <div class="flex items-center gap-2 mb-1">
+                        <label for="password" class="text-xl font-medium">Contraseña</label>
+                        <div class="relative group">
+                            <span class="text-white bg-blue-700 rounded-full w-5 h-5 flex items-center justify-center text-sm cursor-pointer hover:bg-blue-800">?</span>
+                            <div class="absolute hidden group-hover:block bg-white text-black text-sm p-2 rounded-lg shadow-lg w-64 top-6 left-1/2 transform -translate-x-1/2 z-10">
+                                La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y símbolos.
+                            </div>
+                        </div>
+                    </div>
                     <input
                         id="password"
                         type="password"
                         v-model="form.password"
                         class="w-full px-4 py-2 rounded-full bg-blue-600 text-white placeholder-white text-lg focus:outline-none"
                         placeholder="Introduce tu contraseña"
-                        required
                     />
                     <InputError class="mt-1 text-sm text-red-600" :message="form.errors.password" />
                 </div>
@@ -79,7 +82,6 @@ const submit = () => {
                         v-model="form.password_confirmation"
                         class="w-full px-4 py-2 rounded-full bg-blue-600 text-white placeholder-white text-lg focus:outline-none"
                         placeholder="Repite tu contraseña"
-                        required
                     />
                     <InputError class="mt-1 text-sm text-red-600" :message="form.errors.password_confirmation" />
                 </div>

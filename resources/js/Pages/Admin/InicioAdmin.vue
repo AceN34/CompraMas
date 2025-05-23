@@ -58,7 +58,7 @@ function eliminarProducto(id) {
                 <table class="w-full border-4 border-blue-800 text-center">
                     <thead class="bg-blue-600 text-white text-xl">
                     <tr>
-                        <th class="p-2">ID</th>
+                        <th class="p-2">Código</th>
                         <th class="p-2">Nombre</th>
                         <th class="p-2">Precio</th>
                         <th class="p-2">Categoría</th>

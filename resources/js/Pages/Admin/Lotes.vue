@@ -12,6 +12,10 @@ const lotes = ref([]);
 
 onMounted(() => {
     lotes.value = usePage().props.lotes || [];
+
+    if (usePage().props.mustRefresh) {
+        router.reload({ only: ['lotes'] });
+    }
 });
 
 function eliminarLote(codigo) {

@@ -2,15 +2,21 @@
 import { router } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import { usePage } from '@inertiajs/vue3';
+import {onClickOutside} from "@vueuse/core";
 
 const page = usePage();
 const cliente = computed(() => page.props.auth.cliente);
 const autenticado = computed(() => cliente.value !== null);
 
-// 🔍 Campo de búsqueda
+const mostrarMenu = ref(false)
+const menuRef = ref(null)
+
+onClickOutside(menuRef, () => {
+    mostrarMenu.value = false
+})
+
 const search = ref('');
 
-// 🔍 Función para buscar
 const buscar = () => {
     router.get('/productos', { search: search.value }, {
         preserveState: true,
@@ -54,14 +60,39 @@ const buscar = () => {
                 </button>
             </div>
 
-            <div v-if="cliente" class="flex items-center gap-4">
-                <p>{{ cliente?.nombre }}</p>
+            <div v-if="cliente" class="flex items-center gap-4 relative">
+                <!-- Menú desplegable del usuario -->
+                <div class="relative" ref="menuRef">
+                    <button
+                        @click="mostrarMenu = !mostrarMenu"
+                        class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition"
+                    >
+                        <span>{{ cliente?.nombre }}</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Submenú (aparece debajo del botón) -->
+                    <div
+                        v-show="mostrarMenu"
+                        @click.away="mostrarMenu = false"
+                        class="absolute left-0 w-48 mt-2 bg-sky-200 text-black rounded-lg shadow-lg z-50"
+                    >
+                        <a href="/perfil" class="block px-4 py-2 hover:bg-sky-300 transition">Mi perfil</a>
+                        <button class="w-full text-left px-4 py-2 hover:bg-sky-300 transition">Historial de pedidos</button>
+                    </div>
+                </div>
+
+                <!-- Botón de logout -->
                 <button
                     class="bg-black text-white text-sm px-4 py-2 rounded hover:bg-gray-800 transition"
-                    @click="router.post('/logout');"
+                    @click="router.post('/logout')"
                 >
                     Cerrar Sesión
                 </button>
+
+                <!-- Carrito -->
                 <div class="flex items-center gap-1 text-black">
                     <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6">
                     <span>15,00€</span>
