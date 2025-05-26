@@ -1,14 +1,33 @@
-<!-- resources/js/Pages/Productos/ProductoDetalle.vue -->
 <script setup>
 import { Head } from '@inertiajs/vue3'
 import Layout from '@/Layouts/Layout.vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useForm } from '@inertiajs/vue3'
+import {route} from "ziggy-js";
+
 
 const { producto } = defineProps({
     producto: Object
 })
 
 const cantidad = ref(1)
+
+const form = useForm({
+    producto_id: producto.id,
+    cantidad: cantidad,
+})
+
+const añadirAlCarrito = () => {
+    form.cantidad = cantidad.value
+    form.post(route('carrito.agregar'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            cantidad.value = 1
+        }
+    })
+}
+
+
 
 defineOptions({ layout: Layout })
 </script>
@@ -71,6 +90,7 @@ defineOptions({ layout: Layout })
                 <!-- Botón -->
                 <button
                     class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg transition-transform transform hover:scale-105 flex items-center gap-3"
+                    @click="añadirAlCarrito"
                 >
                     <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6">
                     Añadir al carrito

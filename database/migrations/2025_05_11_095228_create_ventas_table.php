@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lote', function (Blueprint $table) {
-            $table->string('codigo')->primary();
-            $table->foreignId('producto_id')
-                ->constrained('productos')
+        Schema::create('ventas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('cliente_id')
+                ->constrained('cliente')
                 ->onDelete('cascade');
-            $table->string('cantidad');
-            $table->date('fecha_caducidad')->nullable();
-            $table->string('estado');
+            $table->decimal('total', 10);
+            $table->string('estado')->default('pendiente'); // Pendiente, Pagado o Cancelado
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lote');
+        Schema::dropIfExists('venta');
     }
 };

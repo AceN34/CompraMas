@@ -20,4 +20,10 @@ class Cliente extends Authenticatable {
         'password',
         'remember_token',
     ];
+
+    public function carrito()
+    {
+        return $this->hasMany(Carrito::class);
+    }
+
 }

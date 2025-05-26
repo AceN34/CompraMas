@@ -12,10 +12,8 @@ defineOptions({
 <template>
     <Head title="Home" />
 
-    <!-- Fondo general y separación visual -->
     <div class="bg-sky-200 min-h-screen pt-6">
-
-        <!-- CARRUSEL HERO -->
+        <!-- Carrusel -->
         <div class="flex items-center justify-center mb-10">
             <div class="carousel w-11/12 max-w-6xl rounded-box shadow-xl">
                 <div id="slide1" class="carousel-item relative w-full">
@@ -49,7 +47,7 @@ defineOptions({
             </div>
         </div>
 
-        <!-- SECCIÓN INFORMATIVA -->
+        <!-- Información -->
         <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10 mb-16">
             <div class="flex-1 space-y-6 text-center md:text-left">
                 <InertiaLink :href="route('productos.index')">

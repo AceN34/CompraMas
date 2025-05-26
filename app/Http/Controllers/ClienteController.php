@@ -6,22 +6,17 @@ use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
-class ClienteController extends Controller
-{
+class ClienteController extends Controller {
     public function register(Request $request) {
-
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:cliente,email',
-            'password' => ['required', 'confirmed',
-                Password::min(8)     // Mínimo 8 caracteres
-                ->mixedCase()             // mayúsculas y minúsculas
-                ->numbers()               // números
-                ->symbols(),              // símbolos,
+            'password' => [
+                'required', 'confirmed',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
             ],
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
@@ -30,17 +25,17 @@ class ClienteController extends Controller
 
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.string' => 'El correo debe ser un texto.',
-            'email.email' => 'El correo debe tener un formato válido (ej: usuario@dominio.com).',
+            'email.email' => 'El correo debe tener un formato válido.',
             'email.max' => 'El correo no puede tener más de 255 caracteres.',
             'email.unique' => 'Este correo ya está registrado.',
 
-            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
-            'password.mixed' => 'La contraseña debe incluir mayúsculas y minúsculas.',
-            'password.numbers' => 'La contraseña debe contener al menos un número.',
-            'password.symbols' => 'La contraseña debe contener al menos un símbolo.',
+            'password.required' => 'La contraseña es obligatoria.',
             'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.mixed' => 'Debe incluir mayúsculas y minúsculas.',
+            'password.numbers' => 'Debe incluir al menos un número.',
+            'password.symbols' => 'Debe incluir al menos un símbolo.',
         ]);
-
 
         Cliente::create([
             'nombre' => $validated['nombre'],
@@ -52,12 +47,16 @@ class ClienteController extends Controller
     }
 
     public function login(Request $request) {
-        $credentials = $request->validate([
+        $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+        ], [
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'El correo debe tener un formato válido.',
+            'password.required' => 'La contraseña es obligatoria.',
         ]);
 
-        if (Auth::guard('cliente')->attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::guard('cliente')->attempt($validated, $request->boolean('remember'))) {
             $request->session()->regenerate();
             $redirectUrl = $request->session()->get('url.intended', route('productos.index'));
             return redirect()->intended($redirectUrl);
@@ -79,12 +78,14 @@ class ClienteController extends Controller
         return redirect()->to($previousUrl)->with('success', 'Has cerrado sesión correctamente.');
     }
 
-    public function verLogin(Request $request)
-    {
+    public function verLogin(Request $request) {
         $previousUrl = url()->previous();
 
-        // Evita redirect a /logout o /login
-        if (!$request->session()->has('url.intended') && !str_contains($previousUrl, '/login') && !str_contains($previousUrl, '/register')) {
+        if (
+            !$request->session()->has('url.intended') &&
+            !str_contains($previousUrl, '/login') &&
+            !str_contains($previousUrl, '/register')
+        ) {
             $request->session()->put('url.intended', $previousUrl);
         }
 
@@ -95,59 +96,72 @@ class ClienteController extends Controller
         return Inertia::render('Auth/Register');
     }
 
-    public function perfil()
-    {
+    public function perfil() {
         $cliente = Auth::guard('cliente')->user();
-        return Inertia::render('Cliente/Perfil', ['cliente' => $cliente]);
+
+        return Inertia::render('Cliente/Perfil', [
+            'cliente' => $cliente,
+        ]);
     }
 
-    public function editarPerfil()
-    {
-        $cliente = Auth::guard('cliente')->user();
-        return Inertia::render('Cliente/EditarPerfil', ['cliente' => $cliente]);
-    }
-
-    public function actualizarPerfil(Request $request)
-    {
+    public function actualizarPerfil(Request $request) {
         $cliente = Auth::guard('cliente')->user();
 
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:cliente,email,' . $cliente->id,
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.string' => 'El nombre debe ser un texto.',
+            'nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
+
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'El correo debe tener un formato válido.',
+            'email.max' => 'El correo no puede tener más de 255 caracteres.',
+            'email.unique' => 'Este correo ya está registrado por otro usuario.',
         ]);
 
         $cliente->update($validated);
 
-        return redirect()->route('cliente.perfil')->with('success', 'Perfil actualizado correctamente.');
+        return redirect()->back()->with('success', 'Perfil actualizado correctamente.');
     }
 
-    public function cambiarContrasenaForm()
-    {
-        return Inertia::render('Cliente/CambiarContrasena');
-    }
-
-    public function actualizarContrasena(Request $request)
-    {
+    public function cambiarContrasena(Request $request) {
         $cliente = Auth::guard('cliente')->user();
 
-        $request->validate([
+        $validated = $request->validate([
             'password_actual' => 'required',
-            'nueva_password' => [
+            'password' => [
                 'required', 'confirmed',
                 Password::min(8)->mixedCase()->numbers()->symbols(),
             ],
+        ], [
+            'password_actual.required' => 'Debes ingresar tu contraseña actual.',
+
+            'password.required' => 'La nueva contraseña es obligatoria.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.min' => 'Debe tener al menos 8 caracteres.',
+            'password.mixed' => 'Debe incluir mayúsculas y minúsculas.',
+            'password.numbers' => 'Debe incluir al menos un número.',
+            'password.symbols' => 'Debe incluir al menos un símbolo.',
         ]);
 
-        if (!Hash::check($request->password_actual, $cliente->password)) {
-            return back()->withErrors(['password_actual' => 'La contraseña actual no es correcta.']);
+        if (!Hash::check($validated['password_actual'], $cliente->password)) {
+            return back()->withErrors([
+                'password_actual' => 'La contraseña actual es incorrecta.',
+            ]);
+        }
+
+        if (Hash::check($validated['password'], $cliente->password)) {
+            return back()->withErrors([
+                'password' => 'La nueva contraseña no puede ser igual a la actual.',
+            ]);
         }
 
         $cliente->update([
-            'password' => Hash::make($request->nueva_password),
+            'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('cliente.perfil')->with('success', 'Contraseña actualizada correctamente.');
+        return redirect()->back()->with('success', 'Contraseña actualizada correctamente.');
     }
-
 }
-

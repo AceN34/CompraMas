@@ -3,7 +3,9 @@
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\LoteController;
 use App\Http\Controllers\Admin\ProductoController;
+use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -41,7 +43,7 @@ Route::middleware('auth:admins')->prefix('admin')->name('admin.')->group(functio
         Route::put('/{codigo}', [LoteController::class, 'update'])->name('lotes.update');
         Route::delete('/{codigo}', [LoteController::class, 'destroy'])->name('lotes.destroy');
     });
-    Route::get('ventas/', [LoteController::class, 'index'])->name('ventas.index');
+    Route::get('ventas/', [VentaController::class, 'index'])->name('ventas.index');
 });
 
 Route::post('/register', [ClienteController::class, 'register'])->name('register');
@@ -52,8 +54,10 @@ Route::get('/register', [ClienteController::class, 'verRegistro'])->name('regist
 
 Route::middleware(['auth:cliente'])->group(function () {
     Route::get('/perfil', [ClienteController::class, 'perfil'])->name('cliente.perfil');
-    Route::get('/perfil/editar', [ClienteController::class, 'editarPerfil'])->name('cliente.editar');
-    Route::post('/perfil/actualizar', [ClienteController::class, 'actualizarPerfil'])->name('cliente.actualizar');
-    Route::get('/perfil/cambiar-contrasena', [ClienteController::class, 'cambiarContrasenaForm'])->name('cliente.cambiar_contrasena');
-    Route::post('/perfil/cambiar-contrasena', [ClienteController::class, 'actualizarContrasena'])->name('cliente.actualizar_contrasena');
+    Route::put('/perfil/editar', [ClienteController::class, 'actualizarPerfil'])->name('cliente.editar');
+    Route::put('/perfil/cambiar-contrasena', [ClienteController::class, 'cambiarContrasena'])->name('cliente.cambiarContrasena');
+    Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito.index');
+    Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
+    Route::put('/carrito/{id}', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
+    Route::delete('/carrito/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 });

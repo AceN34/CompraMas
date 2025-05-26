@@ -1,8 +1,9 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
-import { usePage } from '@inertiajs/vue3';
+import { usePage, Link } from '@inertiajs/vue3';
 import {onClickOutside} from "@vueuse/core";
+import {route} from "ziggy-js";
 
 const page = usePage();
 const cliente = computed(() => page.props.auth.cliente);
@@ -13,7 +14,7 @@ const menuRef = ref(null)
 
 onClickOutside(menuRef, () => {
     mostrarMenu.value = false
-})
+});
 
 const search = ref('');
 
@@ -22,6 +23,17 @@ const buscar = () => {
         preserveState: true,
         preserveScroll: true,
     });
+};
+
+const totalCarrito = computed(() => page.props.totalCarrito ?? 0);
+const totalCarritoFormateado = computed(() =>
+    totalCarrito.value.toFixed(2).replace('.', ',') + '€');
+
+const mostrarVistaPreviaCarrito = ref(false);
+const carrito = computed(() => page.props.carrito ?? []);
+const formatearPrecio = (precio) => {
+    const numero = Number(precio)
+    return isNaN(numero) ? '0,00€' : numero.toFixed(2).replace('.', ',') + '€'
 };
 </script>
 
@@ -73,18 +85,18 @@ const buscar = () => {
                         </svg>
                     </button>
 
-                    <!-- Submenú (aparece debajo del botón) -->
+                    <!-- Submenú -->
                     <div
                         v-show="mostrarMenu"
                         @click.away="mostrarMenu = false"
                         class="absolute left-0 w-48 mt-2 bg-sky-200 text-black rounded-lg shadow-lg z-50"
                     >
-                        <a href="/perfil" class="block px-4 py-2 hover:bg-sky-300 transition">Mi perfil</a>
-                        <button class="w-full text-left px-4 py-2 hover:bg-sky-300 transition">Historial de pedidos</button>
+                        <a href="/perfil" class="block px-4 py-2 rounded-lg hover:bg-sky-300 transition">Mi perfil</a>
+                        <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-sky-300 transition">Historial de pedidos</button>
                     </div>
                 </div>
 
-                <!-- Botón de logout -->
+                <!-- Logout -->
                 <button
                     class="bg-black text-white text-sm px-4 py-2 rounded hover:bg-gray-800 transition"
                     @click="router.post('/logout')"
@@ -93,9 +105,34 @@ const buscar = () => {
                 </button>
 
                 <!-- Carrito -->
-                <div class="flex items-center gap-1 text-black">
-                    <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6">
-                    <span>15,00€</span>
+                <div class="relative"
+                     @mouseenter="mostrarVistaPreviaCarrito = true"
+                     @mouseleave="mostrarVistaPreviaCarrito = false"
+                >
+                    <Link :href="route('carrito.index')" class="flex items-center gap-1 text-black">
+                        <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6">
+                        <span>{{ totalCarritoFormateado }}</span>
+                    </Link>
+
+                    <!-- Vista previa -->
+                    <div v-if="mostrarVistaPreviaCarrito" class="absolute right-0 mt-4 w-64 bg-sky-200 rounded-lg shadow-lg p-4 z-50 text-black">
+                        <p v-if="carrito.length === 0" class="text-gray-700">El carrito está vacío.</p>
+                        <ul v-else>
+                            <li v-for="item in carrito" :key="item.id" class="flex items-center gap-3 mb-3">
+                                <img
+                                    :src="'/images/' + item.producto.imagen"
+                                    alt="Producto"
+                                    class="w-12 h-12 object-contain rounded"
+                                />
+                                <div class="flex-1">
+                                    <p class="text-sm font-semibold truncate">{{ item.producto.nombre }}</p>
+                                    <p class="text-sm text-gray-600">{{ item.cantidad }} x {{ formatearPrecio(item.producto.precio) }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <hr class="my-2" />
+                        <p class="text-right font-semibold">Total: {{ totalCarritoFormateado }}</p>
+                    </div>
                 </div>
             </div>
         </div>

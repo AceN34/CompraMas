@@ -12,16 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('venta_producto', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('venta_id')
-                ->constrained('venta')
-                ->onUpdate('cascade');
-            $table->foreignId('productos_id')
+                ->constrained('ventas')
+                ->onDelete('cascade');
+            $table->foreignId('producto_id')
                 ->constrained('productos')
-                ->onUpdate('cascade');
+                ->onDelete('cascade');
             $table->integer('cantidad');
+            $table->decimal('precio_unitario', 10); // Precio/Unidad
+            $table->decimal('total', 10); // Cantidad * Precio/Unidad
             $table->timestamps();
-
-            $table->primary(['venta_id', 'productos_id']);
         });
     }
 
