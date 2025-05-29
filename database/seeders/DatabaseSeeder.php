@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             AdministradorSeeder::class,
-        ]);
-
-        $this->call([
+            ClienteSeeder::class,
             ProductoSeeder::class,
+            LoteSeeder::class,
+            VentaSeeder::class,
         ]);
     }
 }

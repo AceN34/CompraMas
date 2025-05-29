@@ -30,14 +30,12 @@ class AppServiceProvider extends ServiceProvider
                 return [
                     'success' => session('success'),
                     'error' => session('error'),
+                    'warning' => session('warning'),
                 ];
             },
-        ]);
-        Inertia::share([
             'totalCarrito' => function () {
                 $cliente = Auth::guard('cliente')->user();
                 if (!$cliente) return 0;
-
                 return Carrito::where('cliente_id', $cliente->id)
                     ->with('producto')
                     ->get()
@@ -46,7 +44,6 @@ class AppServiceProvider extends ServiceProvider
             'carrito' => function () {
                 $cliente = Auth::guard('cliente')->user();
                 if (!$cliente) return [];
-
                 return Carrito::where('cliente_id', $cliente->id)
                     ->with('producto')
                     ->get();

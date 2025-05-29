@@ -21,27 +21,33 @@ const form = useForm({
     imagen: null,
 })
 
-// Si se elige "Otros", se actualiza con la nueva categoría
-watch(nuevaCategoria, (val) => {
-    if (form.categoria === 'Otros') {
-        form.categoria = val
+// Se asegura que cuando el valor de 'form.categoria' sea 'Otros', el valor de 'nuevaCategoria' se mantenga
+watch(form.categoria, (val) => {
+    if (val !== 'Otros' && nuevaCategoria.value) {
+        // Si no se selecciona 'Otros', limpiamos el valor de nuevaCategoria
+        nuevaCategoria.value = ''
     }
 })
 
 const submit = () => {
+    // Si la categoría es 'Otros', se usa el valor de nuevaCategoria
+    const categoriaFinal = form.categoria === 'Otros' ? nuevaCategoria.value : form.categoria
+
     form.transform((data) => {
         // Si no se ha seleccionado una nueva imagen, no se modifica la imagen
         if (!data.imagen) {
             const { imagen, ...rest } = data
             return {
                 ...rest,
+                categoria: categoriaFinal, // Se asigna la categoría final
                 _method: 'put',
             }
         }
 
-        // Si hay imagen seleccionada, se envía
+        // Si hay imagen seleccionada, se envia
         return {
             ...data,
+            categoria: categoriaFinal, // Asignamos la categoría final
             _method: 'put',
         }
     }).post(route('admin.productos.update', props.producto.id), {
@@ -54,7 +60,6 @@ const submit = () => {
     })
 }
 </script>
-
 
 <template>
     <div class="min-h-screen bg-sky-300 flex flex-col items-center py-10 px-4 animate-fade-in">
@@ -98,6 +103,7 @@ const submit = () => {
                     <option v-for="cat in categoriasExistentes" :key="cat" :value="cat">{{ cat }}</option>
                 </select>
 
+                <!-- Input para nueva categoría si se selecciona 'Otros' -->
                 <div v-if="form.categoria === 'Otros'">
                     <input
                         v-model="nuevaCategoria"
@@ -106,7 +112,6 @@ const submit = () => {
                         class="w-full px-4 py-2 rounded-full bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
-
                 <InputError class="mt-1 text-sm text-red-600" :message="form.errors.categoria" />
             </div>
 
@@ -162,4 +167,3 @@ const submit = () => {
         </form>
     </div>
 </template>
-

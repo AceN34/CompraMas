@@ -1,9 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue';
-import {Head, router} from '@inertiajs/vue3';
-import Footer from "@/Components/Footer.vue";
-import Header from "@/Components/Header.vue";
-import {route} from "ziggy-js";
+import { computed } from 'vue';
+import { Head, router, Link } from '@inertiajs/vue3';
+import { route } from "ziggy-js";
+import Layout from "@/Layouts/Layout.vue";
 
 const props = defineProps({
     carrito: Array,
@@ -23,21 +22,25 @@ const actualizarCantidad = (item) => {
         cantidad: item.cantidad
     }, {
         preserveScroll: true,
-        only: ['carrito', 'subtotal']
+        only: ['carrito', 'subtotal', 'totalCarrito', 'flash']
     });
 };
 
 const eliminarProducto = (id) => {
     router.delete(route('carrito.eliminar', id), {
         preserveScroll: true,
-        only: ['carrito', 'subtotal']
+        only: ['carrito', 'subtotal', 'totalCarrito', 'flash']
     });
 };
+
+const irADetalles = () => {
+    router.visit(route('venta.detalles'));
+};
+defineOptions({ layout: Layout });
 </script>
 <template>
     <Head title="Carrito" />
     <div class="flex flex-col min-h-screen">
-    <Header/>
         <div class="bg-sky-100 px-28 py-6 flex-1 flex flex-col">
             <div class="max-w-full flex flex-1 flex-col md:flex-row gap-6 text-black">
                 <!-- Lista de productos -->
@@ -54,13 +57,21 @@ const eliminarProducto = (id) => {
                             :key="item.id"
                             class="flex bg-sky-200 rounded-lg overflow-hidden shadow hover:shadow-lg"
                         >
+                            <Link
+                                :href="route('productos.detalles', item.producto.id)"
+                            >
                             <img
                                 :src="'/images/' + item.producto.imagen"
                                 alt="Imagen producto"
                                 class="w-36 h-36 object-contain rounded border shadow"
                             />
+                            </Link>
                             <div class="flex-1 p-4">
-                                <h2 class="font-semibold text-lg">{{ item.producto.nombre }}</h2>
+                                <Link
+                                    :href="route('productos.detalles', item.producto.id)"
+                                >
+                                <h2 class="font-semibold text-lg hover:text-sky-600">{{ item.producto.nombre }}</h2>
+                                </Link>
                                 <div class="flex items-center gap-2 mt-2">
                                     <label class="text-sm">Cantidad:</label>
                                     <input
@@ -85,7 +96,8 @@ const eliminarProducto = (id) => {
                 </div>
 
                 <!-- Resumen -->
-                <div class="md:w-1/3 bg-sky-200 p-6 rounded-lg shadow-md space-y-3 self-start animate-fade-in">
+                <div v-if="!(props.carrito.length === 0)"
+                    class="md:w-1/3 bg-sky-200 p-6 rounded-lg shadow-md space-y-3 self-start animate-fade-in">
                     <div
                         v-for="item in carrito"
                         :key="item.id + '-resumen'"
@@ -100,13 +112,13 @@ const eliminarProducto = (id) => {
                         <span>{{ formatearPrecio(total) }}</span>
                     </div>
                     <button
+                        @click="irADetalles"
                         class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded transition"
                     >
-                        Ir al pago
+                        Continuar con el pedido
                     </button>
                 </div>
             </div>
         </div>
-        <Footer/>
     </div>
 </template>

@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import Footer from '@/Components/Footer.vue';
 import { route } from 'ziggy-js';
+import AlertaFlash from "@/Components/AlertaFlash.vue";
 
 defineProps({
     canResetPassword: {
@@ -30,7 +31,7 @@ const submit = () => {
 <template>
     <Head title="Login Admin" />
     <div class="bg-sky-300 flex flex-col text-black min-h-screen justify-between">
-        <!-- Header con logo -->
+        <!-- Header -->
         <div class="bg-sky-400 py-4 flex justify-center border-b border-blue-800">
             <Link href="/">
                 <img src="/images/logo.png" alt="Logo" class="h-12" />
@@ -50,7 +51,6 @@ const submit = () => {
                         v-model="form.email"
                         class="w-full px-4 py-2 rounded-full bg-blue-600 text-white placeholder-white text-lg focus:outline-none"
                         placeholder="Introduce tu correo"
-                        required
                         autofocus
                         autocomplete="username"
                     />
@@ -65,7 +65,6 @@ const submit = () => {
                         v-model="form.password"
                         class="w-full px-4 py-2 rounded-full bg-blue-600 text-white placeholder-white text-lg focus:outline-none"
                         placeholder="Introduce tu contraseña"
-                        required
                         autocomplete="current-password"
                     />
                     <InputError class="mt-1 text-sm text-red-600" :message="form.errors.password" />

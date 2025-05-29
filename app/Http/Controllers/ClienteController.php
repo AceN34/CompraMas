@@ -48,34 +48,34 @@ class ClienteController extends Controller {
 
     public function login(Request $request) {
         $validated = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|exists:cliente,email',
             'password' => 'required',
         ], [
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo debe tener un formato válido.',
+            'email.exists' => 'No se encontró un usuario con este correo electrónico.',
             'password.required' => 'La contraseña es obligatoria.',
         ]);
 
         if (Auth::guard('cliente')->attempt($validated, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            $redirectUrl = $request->session()->get('url.intended', route('productos.index'));
-            return redirect()->intended($redirectUrl);
+            $redirectUrl = session('url.intended', route('home'));
+            return redirect()->intended($redirectUrl)->with('success', 'Has iniciado sesión correctamente.');
         }
 
         return back()->withErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.',
+            'email' => 'Las credenciales no coinciden con los registros.',
         ])->onlyInput('email');
     }
 
     public function logout(Request $request) {
+        $previousUrl = url()->previous();
         Auth::guard('cliente')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        $previousUrl = $request->session()->get('url.intended', route('home'));
-
-        return redirect()->to($previousUrl)->with('success', 'Has cerrado sesión correctamente.');
+        return redirect($previousUrl)->with('success', 'Has cerrado sesión correctamente.');
     }
 
     public function verLogin(Request $request) {
@@ -98,9 +98,13 @@ class ClienteController extends Controller {
 
     public function perfil() {
         $cliente = Auth::guard('cliente')->user();
+        $numeroPedidos = $cliente->ventas()->count();
+        $totalGastado = $cliente->ventas()->sum('total');
 
         return Inertia::render('Cliente/Perfil', [
             'cliente' => $cliente,
+            'numeroPedidos' => $numeroPedidos,
+            'totalGastado' => $totalGastado,
         ]);
     }
 
@@ -163,5 +167,29 @@ class ClienteController extends Controller {
         ]);
 
         return redirect()->back()->with('success', 'Contraseña actualizada correctamente.');
+    }
+
+    public function historial()
+    {
+        $cliente = auth()->guard('cliente')->user();
+
+        $pedidos = $cliente->ventas()
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('Cliente/HistorialPedidos', [
+            'pedidos' => $pedidos
+        ]);
+    }
+
+    public function detallePedido($id)
+    {
+        $cliente = auth()->guard('cliente')->user();
+
+        $pedido = $cliente->ventas()->with('ventaProductos.producto')->findOrFail($id);
+
+        return Inertia::render('Cliente/DetallePedido', [
+            'pedido' => $pedido
+        ]);
     }
 }

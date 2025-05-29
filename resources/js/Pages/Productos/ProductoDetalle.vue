@@ -5,17 +5,16 @@ import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import {route} from "ziggy-js";
 
-
 const { producto } = defineProps({
     producto: Object
-})
+});
 
-const cantidad = ref(1)
+const cantidad = ref(1);
 
 const form = useForm({
     producto_id: producto.id,
     cantidad: cantidad,
-})
+});
 
 const añadirAlCarrito = () => {
     form.cantidad = cantidad.value
@@ -24,20 +23,16 @@ const añadirAlCarrito = () => {
         onSuccess: () => {
             cantidad.value = 1
         }
-    })
-}
+    });
+};
 
-
-
-defineOptions({ layout: Layout })
+defineOptions({ layout: Layout });
 </script>
 
 <template>
     <Head :title="producto.nombre" />
-
     <div class="bg-sky-300 min-h-screen py-10 px-4">
         <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:flex animate-fade-in">
-
             <!-- Imagen -->
             <div class="md:w-1/2 flex justify-center items-center bg-sky-200 p-6">
                 <img
@@ -50,14 +45,16 @@ defineOptions({ layout: Layout })
             <!-- Detalles -->
             <div class="md:w-1/2 p-8 space-y-4 bg-sky-100 text-gray-800">
                 <div class="flex justify-between items-start">
-                    <h1 class="text-3xl font-bold">{{ producto.nombre }}</h1>
+                    <h1 class="text-3xl font-bold flex-1">{{ producto.nombre }}</h1>
                     <a
                         :href="`/productos?categoria=${producto.categoria}`"
-                        class="text-blue-700 font-semibold hover:underline hover:text-blue-900 transition"
+                        class="text-blue-700 font-semibold hover:underline hover:text-blue-900 transition text-right w-40"
                     >
                         {{ producto.categoria }}
                     </a>
                 </div>
+
+
 
                 <p class="text-2xl font-bold text-green-700">
                     {{ producto.precio }} € / Unidad

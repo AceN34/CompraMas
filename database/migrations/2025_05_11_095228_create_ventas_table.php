@@ -16,8 +16,14 @@ return new class extends Migration
             $table->foreignId('cliente_id')
                 ->constrained('cliente')
                 ->onDelete('cascade');
+            $table->string('nombre', 255);
+            $table->string('direccion', 255);
+            $table->string('ciudad', 255);
+            $table->string('codigo_postal', 255);
+            $table->string('telefono', 255);
+            $table->string('comentarios', 255)->nullable();
             $table->decimal('total', 10);
-            $table->string('estado')->default('pendiente'); // Pendiente, Pagado o Cancelado
+            $table->enum('estado', ['Pendiente', 'Pagado', 'Fallido'])->default('Pendiente');
             $table->timestamps();
         });
     }

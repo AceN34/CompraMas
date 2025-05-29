@@ -60,21 +60,12 @@ const openSection = computed(() => {
             <!-- Ventas -->
             <div>
                 <Link
-                    :href="route('admin.ventas.index')"
+                    :href="route('admin.ventas')"
                     class="text-2xl font-bold underline decoration-blue-800 w-full text-left px-2 py-1 rounded transition duration-200 hover:bg-blue-300 block"
                     :class="{ 'bg-blue-200 border-l-4 border-blue-700': openSection === 'ventas' }"
                 >
                     Ventas
                 </Link>
-
-                <div v-if="openSection === 'ventas'" class="mt-2 pl-4 space-y-2">
-                    <Link
-                        href="/admin/ventas/reporte"
-                        class="block font-semibold hover:bg-blue-200 px-2 py-1 rounded transition"
-                    >
-                        Ver Reporte
-                    </Link>
-                </div>
             </div>
         </nav>
     </aside>

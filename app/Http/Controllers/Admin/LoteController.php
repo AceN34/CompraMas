@@ -9,21 +9,41 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class LoteController extends Controller
-{
+class LoteController extends Controller {
     public function index() {
         $lotes = Lote::with('producto')->get();
+        $lotesPorCaducar = [];
 
-        // Comprueba si el lote esta caducado o no, y lo actualiza en la bbdd
         foreach ($lotes as $lote) {
-            if (Carbon::parse($lote->fecha_caducidad)->isPast() && $lote->estado !== 'Caducado') {
+            $fechaCaducidad = Carbon::parse($lote->fecha_caducidad);
+
+            // Si está caducado, cambiar estado y descontar cantidad del producto
+            if ($fechaCaducidad->isPast() && $lote->estado !== 'Caducado') {
                 $lote->estado = 'Caducado';
                 $lote->save();
+
+                // Descontar la cantidad del lote al producto
+                $producto = $lote->producto;
+                if ($producto) {
+                    // Evitar cantidad negativa
+                    $producto->cantidad = max(0, $producto->cantidad - $lote->cantidad);
+                    $producto->save();
+                }
             }
+
+            // Si caduca en los próximos 7 días y no está caducado
+            if ($fechaCaducidad->isBetween(now(), now()->addDays(7)) && $lote->estado !== 'Caducado') {
+                $lotesPorCaducar[] = $lote->codigo . ' (' . $lote->producto->nombre . ')';
+            }
+        }
+
+        if (!empty($lotesPorCaducar)) {
+            session()->flash('warning', "¡Atención! Los siguientes lotes caducan pronto: \n" . implode(",\n", $lotesPorCaducar));
         }
 
         return Inertia::render('Admin/Lotes', [
             'lotes' => $lotes
+
         ]);
     }
 
@@ -64,8 +84,12 @@ class LoteController extends Controller
         ]);
 
         $producto = Producto::findOrFail($request->producto_id);
+
         // Verifica si hay suficiente cantidad disponible
-        $cantidadDisponible = $producto->cantidad - $producto->lotes()->sum('cantidad');
+        $cantidadAsignada = $producto->lotes()
+            ->where('estado', 'Consumible')
+            ->sum('cantidad');
+        $cantidadDisponible = $producto->cantidad - $cantidadAsignada;
 
         if ($request->cantidad > $cantidadDisponible) {
             return back()->withErrors([
@@ -116,7 +140,10 @@ class LoteController extends Controller
         $producto = Producto::findOrFail($request->producto_id);
 
         // Calcula la cantidad total de los lotes, sin incluir el que se esta modificando
-        $cantidadAsignada = $producto->lotes()->where('codigo', '!=', $lote->codigo)->sum('cantidad');
+        $cantidadAsignada = $producto->lotes()
+            ->where('estado', 'Consumible')
+            ->where('codigo', '!=', $lote->codigo)
+            ->sum('cantidad');
         $cantidadDisponible = $producto->cantidad - $cantidadAsignada;
 
         if ($request->cantidad > $cantidadDisponible) {
@@ -125,14 +152,27 @@ class LoteController extends Controller
             ])->withInput();
         }
 
-        $estado = Carbon::parse($request->fecha_caducidad)->isPast() ? 'Caducado' : 'Consumible';
+        $estadoAnterior = $lote->estado;
+        $nuevoEstado = Carbon::parse($request->fecha_caducidad)->isPast() ? 'Caducado' : 'Consumible';
 
         $lote->update([
             'producto_id' => $request->producto_id,
             'cantidad' => $request->cantidad,
             'fecha_caducidad' => $request->fecha_caducidad,
-            'estado' => $estado,
+            'estado' => $nuevoEstado,
         ]);
+
+        // Si el estado cambia de Consumible a Caducado, descontar cantidad del producto y viceversa
+        if ($estadoAnterior !== $nuevoEstado) {
+            if ($estadoAnterior === 'Consumible' && $nuevoEstado === 'Caducado') {
+                // Se resta la cantidad del producto
+                $producto->cantidad = max(0, $producto->cantidad - $request->cantidad);
+            } else if ($estadoAnterior === 'Caducado' && $nuevoEstado === 'Consumible') {
+                // Se añade la cantidad al producto
+                $producto->cantidad = $producto->cantidad + $request->cantidad;
+            }
+            $producto->save();
+        }
 
         return redirect()->route('admin.lotes.index')->with('success', 'Lote actualizado correctamente.');
     }

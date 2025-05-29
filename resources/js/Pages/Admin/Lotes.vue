@@ -7,6 +7,7 @@ import Sidebar from "@/Components/Sidebar.vue";
 import { route } from 'ziggy-js';
 import { Link } from '@inertiajs/vue3';
 import Swal from "sweetalert2";
+import AlertaFlash from "@/Components/AlertaFlash.vue";
 
 const lotes = ref([]);
 
@@ -55,6 +56,7 @@ function eliminarLote(codigo) {
 <template>
     <Head title="Gestión de Lotes" />
     <div class="min-h-screen flex flex-col justify-between bg-sky-300 text-black">
+        <AlertaFlash/>
         <HeaderAdmin/>
         <div class="flex">
             <Sidebar/>

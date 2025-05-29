@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import {Head, Link, router, useForm} from '@inertiajs/vue3';
 import Footer from "@/Components/Footer.vue";
 import { route } from "ziggy-js";
+import AlertaFlash from "@/Components/AlertaFlash.vue";
 
 const form = useForm({
     nombre: '',

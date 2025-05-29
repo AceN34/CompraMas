@@ -91,8 +91,8 @@ const formatearPrecio = (precio) => {
                         @click.away="mostrarMenu = false"
                         class="absolute left-0 w-48 mt-2 bg-sky-200 text-black rounded-lg shadow-lg z-50"
                     >
-                        <a href="/perfil" class="block px-4 py-2 rounded-lg hover:bg-sky-300 transition">Mi perfil</a>
-                        <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-sky-300 transition">Historial de pedidos</button>
+                        <a :href="route('cliente.perfil')" class="block px-4 py-2 rounded-lg hover:bg-sky-300 transition">Mi perfil</a>
+                        <a :href="route('cliente.historialPedidos')" class="block px-4 py-2 rounded-lg hover:bg-sky-300 transition">Historial de pedidos</a>
                     </div>
                 </div>
 
@@ -124,8 +124,8 @@ const formatearPrecio = (precio) => {
                                     alt="Producto"
                                     class="w-12 h-12 object-contain rounded"
                                 />
-                                <div class="flex-1">
-                                    <p class="text-sm font-semibold truncate">{{ item.producto.nombre }}</p>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold truncate block">{{ item.producto.nombre }}</p>
                                     <p class="text-sm text-gray-600">{{ item.cantidad }} x {{ formatearPrecio(item.producto.precio) }}</p>
                                 </div>
                             </li>

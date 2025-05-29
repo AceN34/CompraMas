@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 class Cliente extends Authenticatable {
     use Notifiable;
 
-    protected $table = 'cliente'; // Asegúrate de que esté en singular
+    protected $table = 'cliente';
 
     protected $fillable = [
         'nombre',
@@ -21,9 +21,11 @@ class Cliente extends Authenticatable {
         'remember_token',
     ];
 
-    public function carrito()
-    {
+    public function carrito() {
         return $this->hasMany(Carrito::class);
     }
 
+    public function ventas() {
+        return $this->hasMany(Venta::class);
+    }
 }

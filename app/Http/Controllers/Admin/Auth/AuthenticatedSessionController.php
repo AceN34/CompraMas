@@ -17,12 +17,17 @@ class AuthenticatedSessionController extends Controller
 
     public function storeLogin(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $validaciones = $request->validate([
+            'email' => 'required|email|exists:administrador,email',
+            'password' => 'required',
+        ], [
+            'email.required' => 'El campo de correo electrónico es obligatorio.',
+            'email.email' => 'El correo debe tener un formato válido.',
+            'email.exists' => 'No se encontró un usuario con este correo electrónico.',
+            'password.required' => 'El campo de la contraseña es obligatorio.',
         ]);
 
-        if (Auth::guard('admins')->attempt($credentials)) {
+        if (Auth::guard('admins')->attempt($validaciones)) {
             $request->session()->regenerate();
             return redirect()->route('admin.inicio');
         }

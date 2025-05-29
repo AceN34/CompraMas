@@ -51,7 +51,7 @@ class CarritoController extends Controller {
             ]);
         }
 
-        return back()->with('success', 'Producto añadido al carrito');
+        return redirect()->back()->with('success', 'El producto se ha añadido al carrito.');
     }
 
     public function actualizar(Request $request, $id) {

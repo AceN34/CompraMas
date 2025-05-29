@@ -35,7 +35,7 @@ const irA = (ruta) => {
                     <button @click="irA('/perfil')" class="hover:text-blue-700 transition">Mi perfil</button>
                 </li>
                 <li>
-                    <button disabled class="text-gray-400 cursor-not-allowed">Historial de pedidos</button>
+                    <button @click="irA('/historial-pedidos')" class="hover:text-blue-700 transition">Historial de pedidos</button>
                 </li>
             </ul>
         </nav>

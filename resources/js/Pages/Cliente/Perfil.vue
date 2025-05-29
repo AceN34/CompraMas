@@ -1,12 +1,13 @@
 <script setup>
-import { usePage, router } from '@inertiajs/vue3';
-import { computed, onMounted, ref, reactive } from 'vue';
-import Footer from '@/Components/Footer.vue';
-import Header from '@/Components/Header.vue';
+import {usePage, router, Head} from '@inertiajs/vue3';
+import { computed, ref, reactive } from 'vue';
 import SidebarPerfil from '@/Components/SidebarPerfil.vue';
+import Layout from "@/Layouts/Layout.vue";
 
 const page = usePage();
 const cliente = computed(() => page.props.auth.cliente);
+const numeroPedidos = computed(() => page.props.numeroPedidos);
+const totalGastado = computed(() => page.props.totalGastado);
 const errores = computed(() => page.props.errors);
 
 // Mostrar formulario
@@ -44,8 +45,6 @@ const actualizarPerfil = () => {
     }, {
         onSuccess: () => {
             modo.value = null;
-            flashMensaje.value = page.props.flash.success; // Para mostrar notificación al actualizar
-            setTimeout(() => cerrarMensaje(), 5000);
         },
     });
 };
@@ -58,52 +57,23 @@ const cambiarContrasena = () => {
     }, {
         onSuccess: () => {
             modo.value = null;
-            flashMensaje.value = page.props.flash.success; // Para mostrar notificación al cambiar contraseña
-            setTimeout(() => cerrarMensaje(), 5000);
         },
     });
 };
 
-
-const flashMensaje = ref(null);
-const ocultar = ref(false);
-
-const cerrarMensaje = () => {
-    ocultar.value = true;
-    setTimeout(() => {
-        flashMensaje.value = null;
-        ocultar.value = false;
-    }, 400); // Tiene que coincidir con el tiempo del fade-out
+const formatearPrecio = (precio) => {
+    const numero = Number(precio)
+    return isNaN(numero) ? '0,00€' : numero.toFixed(2).replace('.', ',') + '€'
 };
-
-onMounted(() => {
-    if (page.props.flash?.success) {
-        flashMensaje.value = page.props.flash.success;
-        setTimeout(() => cerrarMensaje(), 5000);
-    }
-});
+defineOptions({ layout: Layout });
 </script>
 
 <template>
+    <Head title="Perfil" />
     <div class="min-h-screen bg-sky-100 flex flex-col">
-        <Header />
-        <div v-if="flashMensaje"
-             :class="['fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50 flex items-center space-x-2 transition-opacity',
-             ocultar ? 'animate-fade-out' : 'animate-fade-in']"
-        >
-            <span>{{ flashMensaje }}</span>
-            <button
-                @click="cerrarMensaje"
-                class="text-white text-xl leading-none hover:text-gray-200"
-                aria-label="Cerrar"
-            >
-                &times;
-            </button>
-        </div>
         <div class="flex flex-1">
             <SidebarPerfil />
-
-            <main class="flex-grow px-6 py-10">
+            <main class="flex-grow px-6 py-10 flex justify-center items-center">
                 <div class="bg-white rounded-lg shadow-lg p-8 border-l-8 border-blue-600 w-full max-w-5xl mx-auto animate-fade-in">
                     <template v-if="modo === null">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -145,11 +115,11 @@ onMounted(() => {
                             <div class="space-y-6 flex flex-col justify-center">
                                 <div class="bg-sky-100 p-6 rounded-xl text-center shadow">
                                     <p class="text-sm text-gray-600">Pedidos realizados</p>
-                                    <p class="text-3xl font-bold text-sky-700">12</p>
+                                    <p class="text-3xl font-bold text-sky-700">{{ numeroPedidos }}</p>
                                 </div>
                                 <div class="bg-green-100 p-6 rounded-xl text-center shadow">
-                                    <p class="text-sm text-gray-600">Estado de cuenta</p>
-                                    <p class="text-3xl font-bold text-green-700">Verificado</p>
+                                    <p class="text-sm text-gray-600">Total gastado</p>
+                                    <p class="text-3xl font-bold text-green-700">{{ formatearPrecio(totalGastado) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -212,6 +182,5 @@ onMounted(() => {
                 </div>
             </main>
         </div>
-        <Footer />
     </div>
 </template>

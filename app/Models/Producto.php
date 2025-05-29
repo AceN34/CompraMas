@@ -9,7 +9,7 @@ class Producto extends Model
 {
     protected $fillable = ['nombre', 'precio', 'categoria', 'cantidad', 'imagen'];
     public function ventas() {
-        return $this->belongsToMany(Venta::class)
+        return $this->belongsToMany(Venta::class, 'venta_producto')
             ->withPivot('cantidad')
             ->withTimestamps();
     }
