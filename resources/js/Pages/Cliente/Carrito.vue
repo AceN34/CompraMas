@@ -36,6 +36,14 @@ const eliminarProducto = (id) => {
 const irADetalles = () => {
     router.visit(route('venta.detalles'));
 };
+
+const vaciarCarrito = () => {
+    router.delete(route('carrito.vaciar'), {
+        preserveScroll: true,
+        only: ['carrito', 'subtotal', 'totalCarrito', 'flash']
+    });
+};
+
 defineOptions({ layout: Layout });
 </script>
 <template>
@@ -45,6 +53,14 @@ defineOptions({ layout: Layout });
             <div class="max-w-full flex flex-1 flex-col md:flex-row gap-6 text-black">
                 <!-- Lista de productos -->
                 <div class="md:w-2/3 flex flex-col flex-1 animate-fade-in">
+                    <!-- Botón Vaciar Carrito -->
+                    <button
+                        v-if="props.carrito.length > 0"
+                        @click="vaciarCarrito"
+                        class="self-end mb-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded transition"
+                    >
+                        Vaciar carrito
+                    </button>
                     <div class="flex-1 flex flex-col space-y-4">
                         <!-- Si no hay productos en el carrito -->
                         <div v-if="props.carrito.length === 0" class="flex items-center justify-center flex-1 bg-sky-200 rounded-lg shadow text-gray-700">

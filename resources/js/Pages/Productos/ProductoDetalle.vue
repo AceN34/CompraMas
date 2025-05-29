@@ -3,18 +3,18 @@ import { Head } from '@inertiajs/vue3'
 import Layout from '@/Layouts/Layout.vue'
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import {route} from "ziggy-js";
+import { route } from 'ziggy-js'
 
 const { producto } = defineProps({
     producto: Object
-});
+})
 
-const cantidad = ref(1);
+const cantidad = ref(1)
 
 const form = useForm({
     producto_id: producto.id,
     cantidad: cantidad,
-});
+})
 
 const añadirAlCarrito = () => {
     form.cantidad = cantidad.value
@@ -23,10 +23,10 @@ const añadirAlCarrito = () => {
         onSuccess: () => {
             cantidad.value = 1
         }
-    });
-};
+    })
+}
 
-defineOptions({ layout: Layout });
+defineOptions({ layout: Layout })
 </script>
 
 <template>
@@ -54,15 +54,16 @@ defineOptions({ layout: Layout });
                     </a>
                 </div>
 
-
-
                 <p class="text-2xl font-bold text-green-700">
                     {{ producto.precio }} € / Unidad
                 </p>
 
                 <!-- Estado del stock -->
+                <div v-if="producto.cantidad <= 0" class="bg-red-200 text-red-800 text-sm px-3 py-1 rounded-full inline-block font-semibold">
+                    Producto agotado
+                </div>
                 <p
-                    v-if="producto.cantidad < 5"
+                    v-else-if="producto.cantidad <= 5"
                     class="bg-red-100 text-red-700 px-3 py-1 rounded-full inline-block text-sm font-semibold animate-pulse"
                 >
                     ¡Quedan solo {{ producto.cantidad }} unidades!
@@ -80,16 +81,18 @@ defineOptions({ layout: Layout });
                         v-model.number="cantidad"
                         min="1"
                         :max="producto.cantidad"
-                        class="w-20 px-3 py-1 rounded border border-sky-400 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :disabled="producto.cantidad <= 0"
+                        class="w-20 px-3 py-1 rounded border border-sky-400 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
                     />
                 </div>
 
                 <!-- Botón -->
                 <button
-                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg transition-transform transform hover:scale-105 flex items-center gap-3"
+                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg transition-transform transform hover:scale-105 flex items-center gap-3 disabled:bg-gray-400 disabled:cursor-not-allowed"
                     @click="añadirAlCarrito"
+                    :disabled="producto.cantidad <= 0"
                 >
-                    <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6">
+                    <img src="/images/carrito.png" alt="Carrito" class="w-6 h-6" />
                     Añadir al carrito
                 </button>
 
@@ -101,5 +104,15 @@ defineOptions({ layout: Layout });
                 </div>
             </div>
         </div>
+        <!-- Botón para volver con función java -->
+        <a
+            href="javascript:history.back()"
+            class="fixed bottom-6 left-6 bg-sky-100 border border-sky-400 text-sky-700 hover:bg-sky-200 font-semibold px-4 py-2 rounded-full shadow-lg transition-all flex items-center gap-2 z-50"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Volver
+        </a>
     </div>
 </template>

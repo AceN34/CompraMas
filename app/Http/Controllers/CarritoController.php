@@ -31,13 +31,20 @@ class CarritoController extends Controller {
         ]);
 
         $producto = Producto::findOrFail($request->producto_id);
-
         $cliente = auth('cliente')->user();
 
         // Comprueba si existe el producto en el carrito
         $carritoItem = $cliente->carrito()
             ->where('producto_id', $producto->id)
             ->first();
+
+        $cantidadSolicitada = $request->cantidad;
+        $cantidadEnCarrito = $carritoItem ? $carritoItem->cantidad : 0;
+        $cantidadTotal = $cantidadEnCarrito + $cantidadSolicitada;
+
+        if ($cantidadTotal > $producto->cantidad) {
+            return back()->with('error', 'No puedes añadir más unidades de las disponibles.');
+        }
 
         if ($carritoItem) {
             // Si existe se aumenta la cantidad
@@ -73,8 +80,7 @@ class CarritoController extends Controller {
         return redirect()->back()->with('success', 'Producto eliminado del carrito.');
     }
 
-    public function vaciar()
-    {
+    public function vaciar() {
         $clienteId = Auth::guard('cliente')->id();
         Carrito::where('cliente_id', $clienteId)->delete();
 

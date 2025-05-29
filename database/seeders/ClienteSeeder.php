@@ -12,19 +12,19 @@ class ClienteSeeder extends Seeder {
         Cliente::create([
             'nombre' => 'Juan Pérez',
             'email' => 'juan@email.com',
-            'password' => Hash::make('juan$123'),
+            'password' => Hash::make('Juan$123'),
         ]);
 
         Cliente::create([
             'nombre' => 'María López',
             'email' => 'maria@email.com',
-            'password' => Hash::make('maria$123'),
+            'password' => Hash::make('Maria$123'),
         ]);
 
         Cliente::create([
             'nombre' => 'Carlos Ruiz',
             'email' => 'carlos@email.com',
-            'password' => Hash::make('carlos$123'),
+            'password' => Hash::make('Carlos$123'),
         ]);
     }
 }
