@@ -29,10 +29,8 @@ const submit = () => {
 
 <template>
     <Head title="Login" />
-    <body class="min-h-screen">
         <AlertaFlash/>
         <div class="bg-sky-200 flex flex-col text-black min-h-screen">
-
             <!-- Header -->
             <div class="bg-sky-400 py-4 flex justify-center border-b border-blue-800">
                 <Link href="/">
@@ -109,7 +107,6 @@ const submit = () => {
                     </form>
                 </div>
             </div>
+            <Footer />
         </div>
-        <Footer />
-    </body>
 </template>
