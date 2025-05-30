@@ -21,14 +21,14 @@ const submit = () => {
 <template>
     <Head title="Registro" />
     <body class="min-h-screen">
-    <div class="bg-sky-200 flex flex-col text-black min-h-screen flex-grow">
+    <div class="bg-sky-200 flex flex-col text-black min-h-screen">
         <div class="bg-sky-400 py-4 flex justify-center border-b border-blue-800">
             <Link href="/">
                 <img src="/images/logo.png" alt="Logo" class="h-12" />
             </Link>
         </div>
 
-        <div class="flex flex-col items-center justify-center mt-8 flex-grow">
+        <div class="flex flex-col items-center justify-center mt-6 flex-grow">
             <div class="w-full max-w-md p-8">
                 <h1 class="text-4xl font-black text-center mb-6">Crear Cuenta</h1>
 

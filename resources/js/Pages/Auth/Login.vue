@@ -31,7 +31,7 @@ const submit = () => {
     <Head title="Login" />
     <body class="min-h-screen">
         <AlertaFlash/>
-        <div class="bg-sky-200 flex flex-col text-black min-h-screen flex-grow">
+        <div class="bg-sky-200 flex flex-col text-black min-h-screen">
 
             <!-- Header -->
             <div class="bg-sky-400 py-4 flex justify-center border-b border-blue-800">
