@@ -165,7 +165,7 @@ class ProductoSeeder extends Seeder
             ],
             [
                 'nombre' => 'Caldo Casero Pollo Gallina Blanca 1l',
-                'precio' => 1,85,
+                'precio' => 1.85,
                 'categoria' => 'Caldo',
                 'cantidad' => 13,
                 'imagen' => 'caldo_casero_pollo_gallina_blanca_1l.png',
@@ -174,7 +174,7 @@ class ProductoSeeder extends Seeder
             ],
             [
                 'nombre' => 'Macarron Plumas nº3 Gallo 450gr',
-                'precio' => 0,95,
+                'precio' => 0.95,
                 'categoria' => 'Pasta y Arroz',
                 'cantidad' => 41,
                 'imagen' => 'macarron_plumas_nº3_gallo_450gr.png',
