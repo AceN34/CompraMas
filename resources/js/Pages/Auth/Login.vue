@@ -92,7 +92,7 @@ const submit = () => {
                         </div>
 
                         <!-- Opciones alternativas -->
-                        <div class="flex justify-around mb-0">
+                        <div class="flex justify-around">
                             <div class="text-center">
                                 <p class="text-lg font-medium">¿No tienes cuenta?</p>
                                 <Link href="/register" class="mt-2 inline-block bg-blue-700 hover:bg-blue-800 text-white py-2 px-6 rounded-lg font-semibold">
