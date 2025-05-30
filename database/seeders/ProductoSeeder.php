@@ -141,7 +141,7 @@ class ProductoSeeder extends Seeder
                 'precio' => 1.00,
                 'categoria' => 'Embutidos',
                 'cantidad' => 51,
-                'imagen' => 'jamon_cocido_elpozo_lonchas_110gr.jpg',
+                    'imagen' => 'jamon_cocido_elpozo_lonchas_110gr.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
