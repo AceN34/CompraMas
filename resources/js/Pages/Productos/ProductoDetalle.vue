@@ -31,8 +31,8 @@ defineOptions({ layout: Layout })
 
 <template>
     <Head :title="producto.nombre" />
-    <div class="bg-sky-300 min-h-screen py-10 px-4">
-        <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:flex animate-fade-in">
+    <div class="bg-sky-300 min-h-screen flex items-center justify-center px-4 py-10">
+        <div class="w-full max-w-6xl bg-white rounded-xl shadow-lg overflow-hidden md:flex animate-fade-in">
             <!-- Imagen -->
             <div class="md:w-1/2 flex justify-center items-center bg-sky-200 p-6">
                 <img
@@ -47,7 +47,7 @@ defineOptions({ layout: Layout })
                 <div class="flex justify-between items-start">
                     <h1 class="text-3xl font-bold flex-1">{{ producto.nombre }}</h1>
                     <a
-                        :href="`/productos?categoria=${producto.categoria}`"
+                        :href="route('productos.index', { categoria: producto.categoria })"
                         class="text-blue-700 font-semibold hover:underline hover:text-blue-900 transition text-right w-40"
                     >
                         {{ producto.categoria }}

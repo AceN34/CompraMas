@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3'
+import {Head, useForm, usePage} from '@inertiajs/vue3'
 import { ref, watch } from 'vue'
 import InputError from '@/Components/InputError.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
@@ -30,7 +30,8 @@ const submit = () => {
 </script>
 
 <template>
-        <div class="min-h-screen bg-sky-300 flex flex-col items-center py-10 px-4 animate-fade-in">
+    <Head title="Nuevo Producto"/>
+    <div class="min-h-screen bg-sky-300 flex flex-col items-center py-10 px-4 animate-fade-in">
         <h1 class="text-5xl font-extrabold mb-10 text-blue-900 drop-shadow">Añadir Producto</h1>
 
         <form

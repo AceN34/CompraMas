@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import HeaderAdmin from "@/Components/HeaderAdmin.vue";
 import FooterAdmin from "@/Components/FooterAdmin.vue";
@@ -51,6 +51,21 @@ function eliminarLote(codigo) {
         }
     });
 }
+
+const filtroProducto = ref('');
+
+// Obtener lista de productos
+const productosUnicos = computed(() => {
+    const nombres = lotes.value.map(lote => lote.producto?.nombre || '');
+    return [...new Set(nombres)].filter(n => n); // eliminar vacíos
+});
+
+const lotesFiltrados = computed(() => {
+    if (!filtroProducto.value) {
+        return lotes.value;
+    }
+    return lotes.value.filter(lote => lote.producto?.nombre === filtroProducto.value);
+});
 </script>
 
 <template>
@@ -61,7 +76,19 @@ function eliminarLote(codigo) {
         <div class="flex">
             <Sidebar/>
             <main class="flex-1 p-6 overflow-x-auto">
-                <h1 class="text-3xl font-bold mb-6 text-blue-800">Gestión de Lotes</h1>
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-blue-800">Gestión de Lotes</h1>
+                    <!-- Filtro de lotes por producto -->
+                    <div class="flex items-center gap-2">
+                        <label for="producto" class="text-lg font-semibold text-blue-800">Filtrar por producto:</label>
+                        <select id="producto" v-model="filtroProducto" class="p-2 rounded-lg border border-blue-400">
+                            <option value="">Todos</option>
+                            <option v-for="producto in productosUnicos" :key="producto" :value="producto">
+                                {{ producto }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <table class="w-full border-4 border-blue-800 text-center">
                     <thead class="bg-blue-600 text-white text-xl">
                     <tr>
@@ -81,7 +108,7 @@ function eliminarLote(codigo) {
                     </tr>
                     <tr
                         v-else
-                        v-for="lote in lotes"
+                        v-for="lote in lotesFiltrados"
                         :key="lote.codigo"
                         class="odd:bg-sky-200 even:bg-sky-100 border-t-2 border-blue-800">
                         <td class="p-2">{{ lote.codigo }}</td>

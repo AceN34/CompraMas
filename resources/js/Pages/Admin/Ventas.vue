@@ -27,7 +27,7 @@ const chartData = ref({
     labels: etiquetas.value,
     datasets: [
         {
-            label: 'Productos más vendidos',
+            label: 'Productos vendidos',
             backgroundColor: '#0284c7',
             data: cantidades.value,
         },

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import {Head, useForm} from '@inertiajs/vue3'
 import InputError from '@/Components/InputError.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import { route } from 'ziggy-js'
@@ -62,6 +62,7 @@ const submit = () => {
 </script>
 
 <template>
+    <Head title="Editar Producto"/>
     <div class="min-h-screen bg-sky-300 flex flex-col items-center py-10 px-4 animate-fade-in">
         <h1 class="text-4xl font-bold mb-10 text-blue-900">Editar Producto</h1>
 

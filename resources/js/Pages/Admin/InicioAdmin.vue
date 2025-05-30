@@ -74,8 +74,7 @@ function eliminarProducto(id) {
                     <input
                         v-model="search"
                         type="text"
-                        placeholder="Buscar productos..."
-                        @input="buscarProducto"
+                        placeholder="Buscar productos o categorías..."
                     class="w-full rounded-full px-4 py-2 border border-gray-300 focus:outline-none text-black"
                     />
                 </form>

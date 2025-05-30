@@ -13,7 +13,7 @@ class VentaSeeder extends Seeder {
     public function run() {
         $faker = Faker::create();
 
-        // Obtener algunos clientes y productos para asociar
+        // Obtener clientes y productos para asociar
         $clientes = Cliente::all();
         $productos = Producto::all();
 
@@ -42,7 +42,7 @@ class VentaSeeder extends Seeder {
                 'updated_at' => $fechaVenta,
             ]);
 
-            // Crear entre 1 y 5 productos vendidos para esta venta
+            // Crear entre 1 y 5 productos vendidos para cada venta
             $productosEnVenta = $productos->random(rand(1, 5));
             $totalVenta = 0;
 

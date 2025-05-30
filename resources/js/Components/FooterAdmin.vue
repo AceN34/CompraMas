@@ -6,7 +6,7 @@
             <div>
                 <h2 class="text-2xl font-bold text-blue-900">Compra+</h2>
                 <p class="mt-4 text-sm">
-                    © 2025 <span class="font-semibold">Compra+</span> — Proyecto DAW
+                    © 2025 <span class="font-semibold">Compra+</span>
                 </p>
             </div>
 
@@ -25,5 +25,3 @@
         </div>
     </footer>
 </template>
-<script setup lang="ts">
-</script>

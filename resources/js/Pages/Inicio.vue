@@ -28,7 +28,7 @@ defineOptions({
                     class="carousel-item w-full justify-center group"
                 >
                     <InertiaLink :href="route('productos.detalles', producto.id)" class="w-[50%]">
-                        <div class="bg-sky-300 rounded-lg border border-sky-500 shadow justify-center text-center hover:shadow-xl p-4 transition transform flex flex-col h-64">
+                        <div class="bg-sky-400 rounded-lg border border-sky-600 shadow justify-center text-center hover:shadow-xl p-4 transition transform flex flex-col h-64">
                             <img
                                 :src="'/images/' + producto.imagen"
                                 alt="Imagen"

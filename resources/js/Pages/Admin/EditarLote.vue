@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import {Head, useForm} from '@inertiajs/vue3';
 import { ref, onMounted, watch } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -82,6 +82,7 @@ function submit() {
 }
 </script>
 <template>
+    <Head title="Editar Lote"/>
     <div class="min-h-screen bg-sky-300 flex flex-col items-center py-10 px-4 animate-fade-in">
         <h1 class="text-4xl font-bold mb-10 text-blue-900 drop-shadow">Editar Lote</h1>
 

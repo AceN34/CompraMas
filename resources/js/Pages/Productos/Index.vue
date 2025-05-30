@@ -1,30 +1,32 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Layout from "@/Layouts/Layout.vue";
 import { Head } from "@inertiajs/vue3";
 import { Link as InertiaLink } from '@inertiajs/vue3'
 import { route } from "ziggy-js";
 
-const { productos } = defineProps({
+const props = defineProps({
     productos: Array,
     search: String,
+    categoria: String
 });
 
+
 // Variables para los filtros
-const categoriaSeleccionada = ref(null);
+const categoriaSeleccionada = ref(null)
 const precioMin = ref(0);
 const precioMax = ref(100);
 const orden = ref('relevancia');
 const soloDisponibles = ref(true); // Nuevo: para filtrar solo disponibles
 
 const categorias = computed(() => {
-    const todas = productos.map(p => p.categoria);
+    const todas = props.productos.map(p => p.categoria);
     return [...new Set(todas)];
 });
 
     // Filtros
 const productosFiltrados = computed(() => {
-    let filtrados = [...productos];
+    let filtrados = [...props.productos];
 
     if (categoriaSeleccionada.value) {
         filtrados = filtrados.filter(p => p.categoria === categoriaSeleccionada.value);
@@ -47,6 +49,12 @@ const productosFiltrados = computed(() => {
     return filtrados;
 });
 
+onMounted(() => {
+    if (props.categoria) {
+        categoriaSeleccionada.value = props.categoria;
+    }
+});
+
 function limpiarFiltros() {
     categoriaSeleccionada.value = null;
     precioMin.value = 0;
@@ -55,12 +63,10 @@ function limpiarFiltros() {
     soloDisponibles.value = true;
 }
 
-defineOptions({
-layout: Layout
-});
+defineOptions({layout: Layout});
 </script>
 <template>
-    <Head title="Productos" />
+    <Head title="Productos"/>
     <div class="bg-sky-200 min-h-screen flex flex-col">
         <div class="flex flex-grow px-6 py-6 text-black">
             <!-- Menú Lateral -->

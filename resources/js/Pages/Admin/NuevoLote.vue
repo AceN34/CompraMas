@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
-import { useForm, usePage } from '@inertiajs/vue3'
+import {Head, useForm, usePage} from '@inertiajs/vue3'
 import InputError from '@/Components/InputError.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import {route} from "ziggy-js";
@@ -33,6 +33,7 @@ const submit = () => {
 
 
 <template>
+    <Head title="Nuevo Lote" />
     <div class="min-h-screen bg-sky-300 flex flex-col items-center py-10 px-4 animate-fade-in">
         <h1 class="text-5xl font-extrabold mb-10 text-blue-900 drop-shadow">Añadir Lote</h1>
 

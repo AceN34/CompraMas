@@ -25,14 +25,14 @@ onMounted(() => {
         <div class="flex">
             <Sidebar />
             <main class="flex-1 p-8 overflow-x-auto bg-sky-300">
-                <div class="max-w-5xl mx-auto bg-sky-400 rounded-xl shadow-lg p-8 border border-sky-300">
+                <div class="max-w-5xl mx-auto bg-sky-200 rounded-xl shadow-lg p-8 border border-sky-400">
                     <h2 class="text-3xl font-extrabold text-sky-800 mb-8 border-b-4 border-sky-500 pb-2">
                         Detalles del Producto
                     </h2>
 
                     <div class="flex flex-col md:flex-row gap-8">
                         <!-- Imagen Producto -->
-                        <div class="flex-shrink-0 w-full md:w-1/6 rounded-lg overflow-hidden border border-sky-600 shadow-sm bg-sky-300">
+                        <div class="flex-shrink-0 w-full md:w-1/6 rounded-lg overflow-hidden border border-sky-600 shadow-sm bg-sky-100">
                             <img
                                 v-if="producto.imagen"
                                 :src="'/images/' + producto.imagen"
