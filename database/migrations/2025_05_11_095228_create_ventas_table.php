@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('telefono', 255);
             $table->string('comentarios', 255)->nullable();
             $table->decimal('total', 10);
-            $table->enum('estado', ['Pendiente', 'Pagado', 'Fallido'])->default('Pendiente');
+            $table->string('estado');
             $table->timestamps();
         });
     }

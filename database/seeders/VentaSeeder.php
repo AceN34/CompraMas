@@ -30,7 +30,7 @@ class VentaSeeder extends Seeder {
                 'telefono' => '600123456',
                 'comentarios' => 'Comentario de prueba ' . $i,
                 'total' => 0, // Lo actualizaremos luego
-                'estado' => 'Pendiente',
+                'estado' => 'Pagado',
             ]);
 
             // Generar una fecha aleatoria entre el 1 de enero y el 31 de diciembre del año actual
