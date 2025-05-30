@@ -181,6 +181,15 @@ class ProductoSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'nombre' => 'Botella Agua Solan Cabras 1l',
+                'precio' => 1.05,
+                'categoria' => 'Bebidas',
+                'cantidad' => 84,
+                'imagen' => 'botella_agua_solan_cabras_1l.webp',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

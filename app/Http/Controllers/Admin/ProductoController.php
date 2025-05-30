@@ -31,8 +31,15 @@
                 $productos->where('nombre', 'like', '%' . $request->search . '%');
             }
 
+            $categoria = $request->input('categoria');
+
+            if ($categoria) {
+                $productos->where('categoria', $categoria);
+            }
+
             return Inertia::render('Productos/Index', [
                 'productos' => $productos->get(),
+                'categoria' => $categoria,
                 'search' => $request->search,
             ]);
         }
